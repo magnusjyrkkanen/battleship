@@ -1,2 +1,2 @@
 # Battleship
-A simple battleship game for command line with python.
+A simple battleship game made with Python for command line.

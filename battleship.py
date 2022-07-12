@@ -24,17 +24,32 @@ def random_col(board):
 
 ship_row = random_row(board)
 ship_col = random_col(board)
-# Degug prints
-# print(ship_row)
-# print(ship_col)
+
+# Debug prints
+# print(f"Ship row {ship_row}")
+# print(f"Ship col {ship_col}")
 
 for turn in range(4):
     print(f"Turn {turn + 1}")
-    guess_row = int(input("Guess Row: "))
-    guess_col = int(input("Guess Col: "))
+
+    # Row and column inputs.
+    guess_row = None
+    guess_col = None
+    while guess_row is None:
+        try:
+            guess_row = int(input("Guess row: "))
+        except ValueError:
+            print("Invalid input! Input needs to be a number.")
+    while guess_col is None:
+        try:
+            guess_col = int(input("Guess column: "))
+        except ValueError:
+            print("Invalid input! Input needs to be a number.")
 
     if guess_row == ship_row and guess_col == ship_col:
         print("Congratulations! You sunk my battleship!")
+        board[guess_row][guess_col] = "B"
+        print_board(board)
         break
     else:
         if (guess_row < 0 or guess_row > 4) or (guess_col < 0 or guess_col > 4):
@@ -46,4 +61,5 @@ for turn in range(4):
             board[guess_row][guess_col] = "X"
         if turn == 3:
             print("Game Over")
+
     print_board(board)

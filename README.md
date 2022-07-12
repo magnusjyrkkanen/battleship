@@ -14,6 +14,8 @@ A simple battleship game made with Python for command line.
 
 Run on command line with ``python battleship.py`` from the project's main directory.
 
+Requires Python 3.
+
 ## What next?
 
 

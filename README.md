@@ -4,7 +4,7 @@ A simple battleship game made with Python for command line.
 
 ## Summary
 
-
+A simple battleship game for one player made for coding training purposes.
 
 ## Background
 
@@ -18,7 +18,10 @@ Requires Python 3.
 
 ## What next?
 
-
+Adding more features to the game.
+* Option for multiple battleships.
+* Add more options for the player to choose from.
+* Statistics of the past games.
 
 ## Acknowledgments
 

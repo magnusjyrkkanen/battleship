@@ -1,3 +1,5 @@
+import json
+import os
 from random import randint
 
 
@@ -6,6 +8,10 @@ class Battleship():
 
     def __init__(self):
         print("Welcome to battleship!")
+
+        self.stats = self.prepare_statistics()
+        games_played = self.stats["games played"]
+        print(f"Games played so far: {games_played}")
 
         # Game board.
         self.board = []
@@ -22,7 +28,7 @@ class Battleship():
         # print(f"Ship col {ship_col}")
 
     def battleship(self):
-        # Main method.
+        # Main method for the game.
 
         self.print_board(self.board)
 
@@ -62,6 +68,12 @@ class Battleship():
 
             self.print_board(self.board)
 
+        # Update the games played statistic.
+        self.stats.update({"games played": self.stats["games played"] + 1})
+        self.write_statistics(self.stats)
+
+        print("Goodbye!")
+
     def print_board(self, board):
         for row in board:
             print(" ".join(row))
@@ -71,6 +83,29 @@ class Battleship():
 
     def random_col(self, board):
         return randint(0, len(board[0]) - 1)
+
+    def prepare_statistics(self):
+        # Open the statistics file and get the existing data.
+        if os.path.exists("statistics.txt"):
+            file = open("statistics.txt", "r")
+            stats_json = file.read()
+            stats = json.loads(stats_json)
+        else:
+            # Create a statistics file, if one doesn't exist.
+            stats = {
+                "games played": 0,
+            }
+            stats_json = json.dumps(stats)
+            file = open("statistics.txt", "w")
+            file.write(stats_json)
+        file.close()
+        return stats
+
+    def write_statistics(self, stats):
+        stats_json = json.dumps(stats)
+        with open("statistics.txt", "w") as file:
+            file.write(stats_json)
+        return
 
 
 if __name__ == '__main__':

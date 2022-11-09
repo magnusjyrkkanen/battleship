@@ -1,12 +1,17 @@
 import json
 import os
 from random import randint
+from datetime import datetime
 
 
 class Battleship():
     """Class for simple battleship game."""
 
     def __init__(self):
+        # Variables.
+        self.turns = 4
+        self.timestamp = datetime.now(tz=None).isoformat()
+
         print("Welcome to battleship!")
 
         self.stats = self.prepare_statistics()
@@ -17,7 +22,7 @@ class Battleship():
             print(f"You have played {games_played} games of battleship so far.")
 
         print("Rules for battleship:")
-        print("Try to hit the battleship by guessing the right row and column. You have 4 guesses.")
+        print(f"Try to hit the battleship by guessing the right row and column. You have {self.turns} guesses.")
 
         # Game board.
         self.board = []
@@ -40,7 +45,7 @@ class Battleship():
 
         self.print_board(self.board)
 
-        for turn in range(4):
+        for turn in range(self.turns):
             print(f"Turn {turn + 1}")
 
             # Row and column inputs.
@@ -76,7 +81,7 @@ class Battleship():
                     self.board[guess_row][guess_col] = "X"
                     missed_shots += 1
                 if turn == 3:
-                    print("Game Over")
+                    print("That was the last guess. Game Over!")
 
             self.print_board(self.board)
 
@@ -86,11 +91,12 @@ class Battleship():
                 "games played": self.stats["games played"] + 1,
                 "hits": self.stats["hits"] + hits,
                 "missed shots": self.stats["missed shots"] + missed_shots,
+                "latest game": self.timestamp,
                 }
             )
         self.write_statistics(self.stats)
 
-        print("Good game!")
+        print("Goodbye!")
 
     def print_board(self, board):
         for row in board:
@@ -114,6 +120,8 @@ class Battleship():
                 "games played": 0,
                 "hits": 0,
                 "missed shots": 0,
+                "first game": self.timestamp,
+                "latest game": self.timestamp,
             }
             stats_json = json.dumps(stats)
             file = open("statistics.txt", "w")

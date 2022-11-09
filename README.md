@@ -8,7 +8,11 @@ A simple command line battleship game for one player made for coding training pu
 
 ## Background
 
+This game is a simple command line battleship game for one player that is written in Python 3. The player guesses rows and columns to hit the battleship. If the guesses run out, the game ends.
 
+The game saves some statistics about the past games played. The statistics are packed into JSON and saved in separate statistics file. Format can be seen in the statistics_example file.
+
+The game was created mainly for coding training purposes.
 
 ## How is it used?
 
@@ -18,6 +22,7 @@ Requires Python 3.
 
 ## What next?
 
+Refactor code.
 Adding more features to the game.
 * Option for multiple battleships.
 * Add more options for the player to choose from.

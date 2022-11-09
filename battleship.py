@@ -22,7 +22,7 @@ class Battleship():
             print(f"You have played {games_played} games of battleship so far.")
 
         print("Rules for battleship:")
-        print(f"Try to hit the battleship by guessing the right row and column. You have {self.turns} guesses.")
+        print(f"Try to hit the battleship by guessing the right column and row. You have {self.turns} guesses.")
 
         # Game board.
         self.board = []
@@ -32,14 +32,18 @@ class Battleship():
             self.board.append(["O"] * 5)
 
         # Create a ship in random location on board.
-        self.ship_row = self.random_row(self.board)
         self.ship_col = self.random_col(self.board)
+        self.ship_row = self.random_row(self.board)
         # Debug prints
-        # print(f"Ship row {ship_row}")
         # print(f"Ship col {ship_col}")
+        # print(f"Ship row {ship_row}")
 
     def battleship(self):
         # Main method for the game.
+        self.gameboard()
+
+    def gameboard(self):
+        # Method for the hadling game's actions.
         hits = 0
         missed_shots = 0
 
@@ -48,19 +52,19 @@ class Battleship():
         for turn in range(self.turns):
             print(f"Turn {turn + 1}")
 
-            # Row and column inputs.
-            guess_row = None
+            # Column and row inputs.
             guess_col = None
-            while guess_row is None:
-                try:
-                    guess_row = int(input("Guess row: "))
-                    guess_row -= 1
-                except ValueError:
-                    print("Invalid input! Input needs to be a number.")
+            guess_row = None
             while guess_col is None:
                 try:
                     guess_col = int(input("Guess column: "))
                     guess_col -= 1
+                except ValueError:
+                    print("Invalid input! Input needs to be a number.")
+            while guess_row is None:
+                try:
+                    guess_row = int(input("Guess row: "))
+                    guess_row -= 1
                 except ValueError:
                     print("Invalid input! Input needs to be a number.")
 
@@ -97,6 +101,7 @@ class Battleship():
         self.write_statistics(self.stats)
 
         print("Goodbye!")
+        return
 
     def print_board(self, board):
         for row in board:

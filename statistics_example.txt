@@ -1,1 +1,1 @@
-{"games played": 1}
+{"games played": 1, "hits": 0, "missed shots": 4}

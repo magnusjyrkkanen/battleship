@@ -11,7 +11,13 @@ class Battleship():
 
         self.stats = self.prepare_statistics()
         games_played = self.stats["games played"]
-        print(f"Games played so far: {games_played}")
+        if games_played == 0:
+            print("This is your first game!")
+        else:
+            print(f"You have played {games_played} games of battleship so far.")
+
+        print("Rules for battleship:")
+        print("Try to hit the battleship by guessing the right row and column. You have 4 guesses.")
 
         # Game board.
         self.board = []
@@ -29,6 +35,8 @@ class Battleship():
 
     def battleship(self):
         # Main method for the game.
+        hits = 0
+        missed_shots = 0
 
         self.print_board(self.board)
 
@@ -41,11 +49,13 @@ class Battleship():
             while guess_row is None:
                 try:
                     guess_row = int(input("Guess row: "))
+                    guess_row -= 1
                 except ValueError:
                     print("Invalid input! Input needs to be a number.")
             while guess_col is None:
                 try:
                     guess_col = int(input("Guess column: "))
+                    guess_col -= 1
                 except ValueError:
                     print("Invalid input! Input needs to be a number.")
 
@@ -54,6 +64,7 @@ class Battleship():
                 print("Congratulations! You sunk my battleship!")
                 self.board[guess_row][guess_col] = "B"
                 self.print_board(self.board)
+                hits += 1
                 break
             else:
                 if (guess_row < 0 or guess_row > 4) or (guess_col < 0 or guess_col > 4):
@@ -63,16 +74,23 @@ class Battleship():
                 else:
                     print("You missed my battleship!")
                     self.board[guess_row][guess_col] = "X"
+                    missed_shots += 1
                 if turn == 3:
                     print("Game Over")
 
             self.print_board(self.board)
 
         # Update the games played statistic.
-        self.stats.update({"games played": self.stats["games played"] + 1})
+        self.stats.update(
+            {
+                "games played": self.stats["games played"] + 1,
+                "hits": self.stats["hits"] + hits,
+                "missed shots": self.stats["missed shots"] + missed_shots,
+                }
+            )
         self.write_statistics(self.stats)
 
-        print("Goodbye!")
+        print("Good game!")
 
     def print_board(self, board):
         for row in board:
@@ -94,6 +112,8 @@ class Battleship():
             # Create a statistics file, if one doesn't exist.
             stats = {
                 "games played": 0,
+                "hits": 0,
+                "missed shots": 0,
             }
             stats_json = json.dumps(stats)
             file = open("statistics.txt", "w")

@@ -39,11 +39,11 @@ class Battleship():
         # print(f"Ship row {ship_row}")
 
     def battleship(self):
-        # Main method for the game.
+        """Main method for the game."""
         self.gameboard()
 
     def gameboard(self):
-        # Method for the hadling game's actions.
+        """Method for the hadling game's actions."""
         hits = 0
         missed_shots = 0
 
@@ -53,20 +53,8 @@ class Battleship():
             print(f"Turn {turn + 1}")
 
             # Column and row inputs.
-            guess_col = None
-            guess_row = None
-            while guess_col is None:
-                try:
-                    guess_col = int(input("Guess column: "))
-                    guess_col -= 1
-                except ValueError:
-                    print("Invalid input! Input needs to be a number.")
-            while guess_row is None:
-                try:
-                    guess_row = int(input("Guess row: "))
-                    guess_row -= 1
-                except ValueError:
-                    print("Invalid input! Input needs to be a number.")
+            guess_col = self.get_guess("column")
+            guess_row = self.get_guess("row")
 
             # Handle guesses.
             if guess_row == self.ship_row and guess_col == self.ship_col:
@@ -103,18 +91,37 @@ class Battleship():
         print("Goodbye!")
         return
 
-    def print_board(self, board):
-        for row in board:
-            print(" ".join(row))
-
+    # Methods for game setup.
     def random_row(self, board):
         return randint(0, len(board) - 1)
 
     def random_col(self, board):
         return randint(0, len(board[0]) - 1)
 
+    # Methods used during the game.
+    def get_guess(self, guess_type):
+        """Method for getting the guess from the user."""
+        guess = None
+        while guess is None:
+            try:
+                guess = int(input(f"Guess {guess_type}: "))
+                guess -= 1
+                # Invert rows so they go from the bottom to the up.
+                inversion_list = [4, 3, 2, 1, 0]
+                if guess_type == "row" and guess in inversion_list:
+                    guess = inversion_list[guess]
+            except ValueError:
+                print("Invalid input! Input needs to be a number.")
+        return guess
+
+    def print_board(self, board):
+        """Method for printing the gameboard."""
+        for row in board:
+            print(" ".join(row))
+
+    # Statistics methods
     def prepare_statistics(self):
-        # Open the statistics file and get the existing data.
+        """Open the statistics file and get the existing data."""
         if os.path.exists("statistics.txt"):
             file = open("statistics.txt", "r")
             stats_json = file.read()
@@ -135,6 +142,7 @@ class Battleship():
         return stats
 
     def write_statistics(self, stats):
+        """Method for writing statistics into the statistics file."""
         stats_json = json.dumps(stats)
         with open("statistics.txt", "w") as file:
             file.write(stats_json)

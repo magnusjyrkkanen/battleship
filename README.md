@@ -23,6 +23,7 @@ Requires Python 3.
 ## What next?
 
 Refactor code.
+* Simplify large and complicated methods.
 Adding more features to the game.
 * Option for multiple battleships.
 * Add more options for the player to choose from.

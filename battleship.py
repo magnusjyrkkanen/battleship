@@ -10,19 +10,9 @@ class Battleship():
     def __init__(self):
         # Variables.
         self.turns = 4
+        self.debug = False
         self.timestamp = datetime.now(tz=None).isoformat()
-
-        print("Welcome to battleship!")
-
         self.stats = self.prepare_statistics()
-        games_played = self.stats["games played"]
-        if games_played == 0:
-            print("This is your first game!")
-        else:
-            print(f"You have played {games_played} games of battleship so far.")
-
-        print("Rules for battleship:")
-        print(f"Try to hit the battleship by guessing the right column and row. You have {self.turns} guesses.")
 
         # Game board.
         self.board = []
@@ -35,15 +25,30 @@ class Battleship():
         self.ship_col = self.random_col(self.board)
         self.ship_row = self.random_row(self.board)
         # Debug prints
-        # print(f"Ship col {ship_col}")
-        # print(f"Ship row {ship_row}")
+        if self.debug:
+            print(f"Ship col {self.ship_col}")
+            print(f"Ship row {self.ship_row}")
 
     def battleship(self):
         """Main method for the game."""
-        self.gameboard()
+        self.game_begin()
+        self.game_main()
 
-    def gameboard(self):
-        """Method for the hadling game's actions."""
+    def game_begin(self):
+        """Method for the game's begin."""
+        print("Welcome to battleship!")
+        games_played = self.stats["games played"]
+        if games_played == 0:
+            print("This is your first game!")
+        else:
+            print(f"You have played {games_played} games of battleship so far.")
+
+        print("Rules for battleship:")
+        print(f"Try to hit the battleship on the board by guessing the right column and row.")
+        print(f"You have {self.turns} guesses in total. Good luck!")
+
+    def game_main(self):
+        """Method for hadling the game's actions."""
         hits = 0
         missed_shots = 0
 
@@ -106,7 +111,7 @@ class Battleship():
             try:
                 guess = int(input(f"Guess {guess_type}: "))
                 guess -= 1
-                # Invert rows so they go from the bottom to the up.
+                # Invert row guesses so the rows go from the bottom to the up.
                 inversion_list = [4, 3, 2, 1, 0]
                 if guess_type == "row" and guess in inversion_list:
                     guess = inversion_list[guess]

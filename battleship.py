@@ -32,7 +32,7 @@ class Battleship():
     def battleship(self):
         """Main method for the game."""
         self.game_begin()
-        self.game_main()
+        self.game_actions()
 
     def game_begin(self):
         """Method for the game's begin."""
@@ -40,14 +40,12 @@ class Battleship():
         games_played = self.stats["games played"]
         if games_played == 0:
             print("This is your first game!")
+            self.print_rules()
         else:
             print(f"You have played {games_played} games of battleship so far.")
+        self.choose_options()
 
-        print("Rules for battleship:")
-        print(f"Try to hit the battleship on the board by guessing the right column and row.")
-        print(f"You have {self.turns} guesses in total. Good luck!")
-
-    def game_main(self):
+    def game_actions(self):
         """Method for hadling the game's actions."""
         hits = 0
         missed_shots = 0
@@ -97,6 +95,30 @@ class Battleship():
         return
 
     # Methods for game setup.
+    def choose_options(self):
+        """Method for different options for user."""
+        start_game = None
+        chosen_option = None
+        while start_game is None:
+            try:
+                chosen_option = int(input(f"Input 1 to start a new game or input 2 to print rules: "))
+                if chosen_option == 1:
+                    start_game = True
+                if chosen_option == 2:
+                    self.print_rules()
+                else:
+                    print("Please choose one of the available options.")
+            except ValueError:
+                print("Invalid input! Input needs to be a number.")
+        return
+
+    def print_rules(self):
+        """Method for printing game rules."""
+        print("Rules for battleship:")
+        print(f"Try to hit the battleship on the board by guessing the right column and row.")
+        print(f"You have {self.turns} guesses in total. Good luck!")
+        return
+
     def random_row(self, board):
         return randint(0, len(board) - 1)
 

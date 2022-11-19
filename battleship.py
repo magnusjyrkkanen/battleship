@@ -9,25 +9,18 @@ class Battleship():
 
     def __init__(self):
         # Variables.
-        self.turns = 4
-        self.debug = False
+        self.debug = True
+        self.turns = 4  # If can change in options, then starting from 3
+        self.board_size = 5  # If can change in options, then starting from 3
+        self.ships = 1
         self.timestamp = datetime.now(tz=None).isoformat()
         self.stats = self.prepare_statistics()
 
         # Game board.
         self.board = []
 
-        # Prepare board for the game.
-        for x in range(5):
-            self.board.append(["O"] * 5)
-
-        # Create a ship in random location on board.
-        self.ship_col = self.random_col(self.board)
-        self.ship_row = self.random_row(self.board)
-        # Debug prints
-        if self.debug:
-            print(f"Ship col {self.ship_col}")
-            print(f"Ship row {self.ship_row}")
+        # Battleship locations on the gameboard.
+        self.battleships = []
 
     def battleship(self):
         """Main method for the game."""
@@ -44,11 +37,14 @@ class Battleship():
         else:
             print(f"You have played {games_played} games of battleship so far.")
         self.choose_options()
+        self.prepare_board()
+        self.create_ships()
 
     def game_actions(self):
         """Method for hadling the game's actions."""
         hits = 0
         missed_shots = 0
+        ships_left = self.ships
 
         self.print_board(self.board)
 
@@ -60,14 +56,21 @@ class Battleship():
             guess_row = self.get_guess("row")
 
             # Handle guesses.
-            if guess_row == self.ship_row and guess_col == self.ship_col:
+            shot_hit = self.check_ship_location(guess_col, guess_row)
+            if shot_hit:
                 print("Congratulations! You sunk my battleship!")
                 self.board[guess_row][guess_col] = "B"
-                self.print_board(self.board)
                 hits += 1
-                break
+                ships_left -= 1
+                if ships_left < 1:
+                    self.print_board(self.board)
+                    break
             else:
-                if (guess_row < 0 or guess_row > 4) or (guess_col < 0 or guess_col > 4):
+                if (
+                    (guess_row < 0 or guess_row > self.board_size - 1)
+                    or
+                    (guess_col < 0 or guess_col > self.board_size - 1)
+                        ):
                     print("Oops, that's not even in the ocean.")
                 elif(self.board[guess_row][guess_col] == "X"):
                     print("You guessed that one already.")
@@ -75,7 +78,7 @@ class Battleship():
                     print("You missed my battleship!")
                     self.board[guess_row][guess_col] = "X"
                     missed_shots += 1
-                if turn == 3:
+                if turn == self.turns - 1:
                     print("That was the last guess. Game Over!")
 
             self.print_board(self.board)
@@ -95,21 +98,49 @@ class Battleship():
         return
 
     # Methods for game setup.
+    def prepare_board(self):
+        """Method for preparing board for the game."""
+        for x in range(self.board_size):
+            self.board.append(["O"] * self.board_size)
+        return
+
     def choose_options(self):
         """Method for different options for user."""
         start_game = None
         chosen_option = None
         while start_game is None:
             try:
-                chosen_option = int(input(f"Input 1 to start a new game or input 2 to print rules: "))
-                if chosen_option == 1:
+                print("Choose one of the following options:")
+                print("Choose 1 to start new game with 1 boat.")
+                print("Choose 2 to start new game with 2 boats.")
+                print("Choose 3 to start new game with 3 boats.")
+                print("Choose 4 to print the game rules.")
+                chosen_option = int(input(f"Choose an option: "))
+                if chosen_option in [1, 2, 3]:
+                    self.ships = chosen_option
+                    # self.board_size += chosen_option
+                    # self.turns += chosen_option
                     start_game = True
-                if chosen_option == 2:
+                elif chosen_option == 4:
                     self.print_rules()
                 else:
-                    print("Please choose one of the available options.")
+                    print("Please, choose one of the available options.")
             except ValueError:
                 print("Invalid input! Input needs to be a number.")
+        return
+
+    def create_ships(self):
+        """Method for creating all the ships for the game."""
+        for ship in range(self.ships):
+            place_taken = True
+            while place_taken:
+                # Create a ship in random location on board.
+                ship_col = self.random_col(self.board)
+                ship_row = self.random_row(self.board)
+                place_taken = self.check_ship_location(ship_col, ship_row)
+            self.battleships.append([ship_col, ship_row])
+        if self.debug:
+            print(self.battleships)
         return
 
     def print_rules(self):
@@ -126,6 +157,13 @@ class Battleship():
         return randint(0, len(board[0]) - 1)
 
     # Methods used during the game.
+    def check_ship_location(self, x, y):
+        """Method for checking battleship locations."""
+        for ship in self.battleships:
+            if set([x, y]) == set(ship):
+                return True
+        return False
+
     def get_guess(self, guess_type):
         """Method for getting the guess from the user."""
         guess = None

@@ -1,6 +1,6 @@
 import json
 import os
-from random import randint
+from random import randint, choices
 from datetime import datetime
 
 
@@ -9,7 +9,7 @@ class Battleship():
 
     def __init__(self):
         # Variables.
-        self.debug = True
+        self.debug = False
         self.turns = 4  # If can change in options, then starting from 3
         self.board_size = 5  # If can change in options, then starting from 3
         self.ships = 1
@@ -147,7 +147,9 @@ class Battleship():
         """Method for printing game rules."""
         print("Rules for battleship:")
         print(f"Try to hit the battleship on the board by guessing the right column and row.")
-        print(f"You have {self.turns} guesses in total. Good luck!")
+        print(f"You have {self.turns} guesses in total.")
+        print("You can choose to have from one to three ships on the board. Try to find all of the ships.")
+        print("Good luck!")
         return
 
     def random_row(self, board):
@@ -155,6 +157,12 @@ class Battleship():
 
     def random_col(self, board):
         return randint(0, len(board[0]) - 1)
+
+    def ship_size(self):
+        """Method for returning random size for ship."""
+        possible_sizes = [1, 2, 3]
+        size = choices(possible_sizes, cum_weights=[5, 7, 8], k=1)
+        return size[0]
 
     # Methods used during the game.
     def check_ship_location(self, x, y):

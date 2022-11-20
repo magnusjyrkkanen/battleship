@@ -25,9 +25,12 @@ Requires Python 3.
 Refactor code.
 * Simplify large and complicated methods.
 Adding more features to the game.
-* Option for multiple battleships.
-* Add more options for the player to choose from.
-* More statistics of the past games.
+* Option for multiple battleships with different sizes.
+* Board size and number of turns to vary according to number of ships.
+* More statistics of past games.
+Testing
+* Adding tests everywhere where they are sensible.
+* Modidify existing code to be testable.
 
 ## Acknowledgments
 

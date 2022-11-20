@@ -3,3 +3,6 @@
 
 # Statistics file
 statistics.txt
+
+# Test cache files
+*.pyc

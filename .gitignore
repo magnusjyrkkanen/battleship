@@ -4,5 +4,5 @@
 # Statistics file
 statistics.txt
 
-# Test cache files
+# Python cache files
 *.pyc

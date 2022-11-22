@@ -1,0 +1,6 @@
+# Requirements related to development.
+
+# Get other requirements from their own file.
+-r requirements.txt
+
+pytest

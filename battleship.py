@@ -12,7 +12,7 @@ class Battleship():
         self.debug = False
         self.turns = 4  # If can change in options, then starting from 3
         self.board_size = 5  # If can change in options, then starting from 3
-        self.ships = 1
+        self.ships = 1  # Default number of ships is 1.
         self.timestamp = datetime.now(tz=None).isoformat()
         self.stats = self.prepare_statistics()
 
@@ -49,7 +49,7 @@ class Battleship():
         self.print_board(self.board)
 
         for turn in range(self.turns):
-            print(f"Turn {turn + 1}")
+            print(f"This is turn {turn + 1}")
 
             # Column and row inputs.
             guess_col = self.get_guess("column")
@@ -67,12 +67,12 @@ class Battleship():
                     break
             else:
                 if (
-                    (guess_row < 0 or guess_row > self.board_size - 1)
+                    (guess_row < 0 or guess_row > (self.board_size - 1))
                     or
-                    (guess_col < 0 or guess_col > self.board_size - 1)
+                    (guess_col < 0 or guess_col > (self.board_size - 1))
                         ):
                     print("Oops, that's not even in the ocean.")
-                elif(self.board[guess_row][guess_col] == "X"):
+                elif (self.board[guess_row][guess_col] == "X"):
                     print("You guessed that one already.")
                 else:
                     print("You missed my battleship!")
@@ -83,7 +83,7 @@ class Battleship():
 
             self.print_board(self.board)
 
-        # Update the games played statistic.
+        # Update statistics with played game's events.
         self.stats.update(
             {
                 "games played": self.stats["games played"] + 1,
@@ -161,7 +161,7 @@ class Battleship():
     def ship_size(self):
         """Method for returning random size for ship."""
         possible_sizes = [1, 2, 3]
-        size = choices(possible_sizes, cum_weights=[5, 7, 8], k=1)
+        size = choices(possible_sizes, cum_weights=[5, 7, 8], k=1)  # Relational weights [5, 2, 1]
         return size[0]
 
     # Methods used during the game.

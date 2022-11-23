@@ -10,8 +10,8 @@ class Battleship():
     def __init__(self):
         # Variables.
         self.debug = False
-        self.turns = 4  # If can change in options, then starting from 3
-        self.board_size = 5  # If can change in options, then starting from 3
+        self.turns = 3  # If can change in options, then starting from 3
+        self.board_size = 3  # If can change in options, then starting from 3
         self.ships = 1  # Default number of ships is 1.
         self.timestamp = datetime.now(tz=None).isoformat()
         self.stats = self.prepare_statistics()
@@ -111,18 +111,21 @@ class Battleship():
         while start_game is None:
             try:
                 print("Choose one of the following options:")
-                print("Choose 1 to start new game with 1 boat.")
-                print("Choose 2 to start new game with 2 boats.")
-                print("Choose 3 to start new game with 3 boats.")
+                print("Choose 1 to start new game with 1 ship and small ocean.")
+                print("Choose 2 to start new game with 2 ships and medium ocean.")
+                print("Choose 3 to start new game with 3 ships and large ocean.")
                 print("Choose 4 to print the game rules.")
+                print("Choose 5 to print all the statistics.")
                 chosen_option = int(input(f"Choose an option: "))
                 if chosen_option in [1, 2, 3]:
                     self.ships = chosen_option
-                    # self.board_size += chosen_option
-                    # self.turns += chosen_option
+                    self.board_size += chosen_option
+                    self.turns += chosen_option
                     start_game = True
                 elif chosen_option == 4:
                     self.print_rules()
+                elif chosen_option == 5:
+                    self.print_statistics()
                 else:
                     print("Please, choose one of the available options.")
             except ValueError:
@@ -140,15 +143,18 @@ class Battleship():
                 place_taken = self.check_ship_location(ship_col, ship_row)
             self.battleships.append([ship_col, ship_row])
         if self.debug:
+            # Prints battleships with the actual coordinates that the code uses.
             print(self.battleships)
         return
 
     def print_rules(self):
         """Method for printing game rules."""
         print("Rules for battleship:")
-        print(f"Try to hit the battleship on the board by guessing the right column and row.")
-        print(f"You have {self.turns} guesses in total.")
-        print("You can choose to have from one to three ships on the board. Try to find all of the ships.")
+        print("You can choose to have from one to three ships on the board.")
+        print("Try to hit the battleships on the board by guessing the right column and row.")
+        print("The number of guesses you have depends on how many ships you choose to have on the board.")
+        print("With 1 ship you have 4 guesses, with 2 ships you have 5 guesses and with 3 ships you have 6 guesses.")
+        print("The size of the ocean also depends on the number of ships. Try to find all of the ships.")
         print("Good luck!")
         return
 
@@ -180,7 +186,10 @@ class Battleship():
                 guess = int(input(f"Guess {guess_type}: "))
                 guess -= 1
                 # Invert row guesses so the rows go from the bottom to the up.
-                inversion_list = [4, 3, 2, 1, 0]
+                # inversion_list = [5, 4, 3, 2, 1, 0]
+                inversion_list = list(range(self.turns - 1, -1, -1))
+                if self.debug:
+                    print(inversion_list)
                 if guess_type == "row" and guess in inversion_list:
                     guess = inversion_list[guess]
             except ValueError:
@@ -213,6 +222,11 @@ class Battleship():
             file.write(stats_json)
         file.close()
         return stats
+
+    def print_statistics(self):
+        """Method for printing all saved statistics."""
+        print("Statistics about past games: ")
+        print(self.stats)
 
     def write_statistics(self, stats):
         """Method for writing statistics into the statistics file."""

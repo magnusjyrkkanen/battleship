@@ -16,9 +16,11 @@ The game was created mainly for coding training purposes.
 
 ## How is it used?
 
-Run on command line with ``python battleship.py`` from the project's main directory.
+Run the game on command line with ``python battleship.py`` from the project's main directory.
 
 Requires Python 3.
+
+Requirements for running the tests are found in the requirements-dev -file. To install all requirements including development requirements use command ``pip install -r requirements-dev.txt``.
 
 ## What next?
 

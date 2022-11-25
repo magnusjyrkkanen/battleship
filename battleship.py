@@ -9,7 +9,7 @@ class Battleship():
 
     def __init__(self):
         # Variables.
-        self.debug = False
+        self.debug = True
         self.turns = 3  # If can change in options, then starting from 3
         self.board_size = 3  # If can change in options, then starting from 3
         self.ships = 1  # Default number of ships is 1.
@@ -56,7 +56,7 @@ class Battleship():
             guess_row = self.get_guess("row")
 
             # Handle guesses.
-            shot_hit = self.check_ship_location(guess_col, guess_row)
+            shot_hit = self.check_ship_location(self.battleships, guess_col, guess_row)
             if shot_hit:
                 print("Congratulations! You sunk my battleship!")
                 self.board[guess_row][guess_col] = "B"
@@ -97,7 +97,7 @@ class Battleship():
         print("Goodbye!")
         return
 
-    # Methods for game setup.
+    # Methods used for game setup.
     def prepare_board(self):
         """Method for preparing board for the game."""
         for x in range(self.board_size):
@@ -134,14 +134,29 @@ class Battleship():
 
     def create_ships(self):
         """Method for creating all the ships for the game."""
-        for ship in range(self.ships):
-            place_taken = True
-            while place_taken:
-                # Create a ship in random location on board.
-                ship_col = self.random_col(self.board)
-                ship_row = self.random_row(self.board)
-                place_taken = self.check_ship_location(ship_col, ship_row)
-            self.battleships.append([ship_col, ship_row])
+        for ship_number in range(self.ships):
+            ship = []
+            ship_size = self.ship_size()
+            for ship_part in range(ship_size):
+                ship_col = -1
+                ship_row = -1
+                place_taken = True
+                while place_taken:
+                    if ship_part == 0:
+                        # Create a ship in random location on board.
+                        ship_col = self.random_col(self.board)
+                        ship_row = self.random_row(self.board)
+                    if ship_part == 1:
+                        ship_col = self.random_col(self.board)
+                        ship_row = self.random_row(self.board)
+                    if ship_part == 2:
+                        ship_col = self.random_col(self.board)
+                        ship_row = self.random_row(self.board)
+                    place_taken = self.check_ship_location(self.battleships, ship_col, ship_row)
+                    if self.debug:
+                        print([0, ship_col, ship_row])
+                ship.append([0, ship_col, ship_row])
+            self.battleships.append(ship)
         if self.debug:
             # Prints battleships with the actual coordinates that the code uses.
             print(self.battleships)
@@ -168,14 +183,18 @@ class Battleship():
         """Method for returning random size for ship."""
         possible_sizes = [1, 2, 3]
         size = choices(possible_sizes, cum_weights=[5, 7, 8], k=1)  # Relational weights [5, 2, 1]
-        return size[0]
+        # return size[0]
+        # Return size 1 until rest of the code is done.
+        return 1
 
     # Methods used during the game.
-    def check_ship_location(self, x, y):
+    def check_ship_location(self, battleships, x, y):
         """Method for checking battleship locations."""
-        for ship in self.battleships:
-            if set([x, y]) == set(ship):
-                return True
+        print("Chek happens.")
+        for ship in battleships:
+            for ship_part in ship:
+                if set([x, y]) == set(ship_part[1:3]):
+                    return True
         return False
 
     def get_guess(self, guess_type):

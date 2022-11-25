@@ -28,7 +28,7 @@ Refactor code
 * Simplify large and complicated methods.
 
 Adding more features to the game
-* Option for multiple battleships with different sizes.
+* Finish option for multiple battleships with different sizes.
 * Board size and number of turns to vary according to number of ships.
 * More statistics of past games.
 

@@ -9,7 +9,7 @@ class Battleship():
 
     def __init__(self):
         # Variables.
-        self.debug = True
+        self.debug = False
         self.turns = 3  # If can change in options, then starting from 3
         self.board_size = 3  # If can change in options, then starting from 3
         self.ships = 1  # Default number of ships is 1.
@@ -24,11 +24,13 @@ class Battleship():
 
     def battleship(self):
         """Main method for the game."""
+        
         self.game_begin()
         self.game_actions()
 
     def game_begin(self):
         """Method for the game's begin."""
+
         print("Welcome to battleship!")
         games_played = self.stats["games played"]
         if games_played == 0:
@@ -40,8 +42,9 @@ class Battleship():
         self.prepare_board()
         self.create_ships()
 
-    def game_actions(self):
+    def game_actions(self) -> None:
         """Method for hadling the game's actions."""
+
         hits = 0
         missed_shots = 0
         ships_left = self.ships
@@ -98,14 +101,16 @@ class Battleship():
         return
 
     # Methods used for game setup.
-    def prepare_board(self):
+    def prepare_board(self) -> None:
         """Method for preparing board for the game."""
+
         for x in range(self.board_size):
             self.board.append(["O"] * self.board_size)
         return
 
     def choose_options(self):
         """Method for different options for user."""
+
         start_game = None
         chosen_option = None
         while start_game is None:
@@ -134,12 +139,13 @@ class Battleship():
 
     def create_ships(self):
         """Method for creating all the ships for the game."""
+
         for ship_number in range(self.ships):
             ship = []
             ship_size = self.ship_size()
             for ship_part in range(ship_size):
-                ship_col = -1
-                ship_row = -1
+                ship_col = None
+                ship_row = None
                 place_taken = True
                 while place_taken:
                     if ship_part == 0:
@@ -164,6 +170,7 @@ class Battleship():
 
     def print_rules(self):
         """Method for printing game rules."""
+
         print("Rules for battleship:")
         print("You can choose to have from one to three ships on the board.")
         print("Try to hit the battleships on the board by guessing the right column and row.")
@@ -181,6 +188,7 @@ class Battleship():
 
     def ship_size(self):
         """Method for returning random size for ship."""
+
         possible_sizes = [1, 2, 3]
         size = choices(possible_sizes, cum_weights=[5, 7, 8], k=1)  # Relational weights [5, 2, 1]
         # return size[0]
@@ -190,7 +198,9 @@ class Battleship():
     # Methods used during the game.
     def check_ship_location(self, battleships, x, y):
         """Method for checking battleship locations."""
-        print("Chek happens.")
+
+        if self.debug:
+            print("check_ship_location check happens.")
         for ship in battleships:
             for ship_part in ship:
                 if set([x, y]) == set(ship_part[1:3]):
@@ -199,6 +209,7 @@ class Battleship():
 
     def get_guess(self, guess_type):
         """Method for getting the guess from the user."""
+
         guess = None
         while guess is None:
             try:
@@ -217,12 +228,14 @@ class Battleship():
 
     def print_board(self, board):
         """Method for printing the gameboard."""
+
         for row in board:
             print(" ".join(row))
 
     # Statistics methods
     def prepare_statistics(self):
         """Open the statistics file and get the existing data."""
+
         if os.path.exists("statistics.txt"):
             file = open("statistics.txt", "r")
             stats_json = file.read()
@@ -244,11 +257,13 @@ class Battleship():
 
     def print_statistics(self):
         """Method for printing all saved statistics."""
+
         print("Statistics about past games: ")
         print(self.stats)
 
     def write_statistics(self, stats):
         """Method for writing statistics into the statistics file."""
+
         stats_json = json.dumps(stats)
         with open("statistics.txt", "w") as file:
             file.write(stats_json)
